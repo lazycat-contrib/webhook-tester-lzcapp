@@ -1,0 +1,18 @@
+package: community.lazycat.app.webhook-tester
+name: Webhook Tester
+version: 2.3.0
+description: "Powerful tool for testing webhooks and HTTP requests: capture incoming requests, inspect headers/payloads, and replay responses with custom URLs."
+min_os_version: "1.5.0"
+homepage: https://github.com/tarampampam/webhook-tester
+author: tarampampam
+license: MIT
+permissions:
+  required:
+    - net.internet
+locales:
+  zh:
+    name: Webhook Tester
+    description: "强大的 Webhook 与 HTTP 请求测试工具：捕获传入请求、查看头与负载，并可自定义 URL 与响应进行回放。"
+  en:
+    name: Webhook Tester
+    description: "Powerful tool for testing webhooks and HTTP requests: capture incoming requests, inspect headers/payloads, and replay responses with custom URLs."

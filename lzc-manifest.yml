@@ -1,0 +1,41 @@
+application:
+  subdomain: webhook-tester
+  multi_instance: false
+  # Web UI 无任何账号/鉴权选项，不加 public_path，由平台入口鉴权兜底。
+  upstreams:
+    - location: /package-licenses/
+      backend: file:///lzcapp/pkg/content/licenses/
+    - location: /
+      backend: http://webhook-tester:8080/
+services:
+  webhook-tester:
+    # upstream: tarampampam/webhook-tester:2.3.0
+    image: docker.1ms.run/tarampampam/webhook-tester:2.3.0
+    environment:
+      - TZ=Asia/Shanghai
+      - HTTP_PORT=8080
+      - REDIS_DSN=redis://redis:6379/0
+    depends_on:
+      - redis
+  redis:
+    # upstream: library/redis:8.10.3
+    image: docker.1ms.run/library/redis:8.10.3
+    command: >-
+      /bin/sh -c "redis-server --save \"\" --appendonly no"
+usage: |
+  Webhook Tester 是一个本地 Webhook / HTTP 请求测试工具：
+  生成自定义 URL 捕获传入请求，查看请求头、Query、Body 等细节，
+  并可配置模拟响应（状态码 / 头 / 内容 / 延迟），支持请求历史与 Session。
+
+  使用方法：
+  1. 打开应用，点击创建 Session，即可获得一组自定义 URL；
+     把外部服务的 Webhook 地址指向该 URL，即可在页面里实时看到请求内容。
+  2. 可为每个 URL 配置模拟响应，用于调试回调处理逻辑。
+  3. Web UI 本身无账号体系，本包不加 public_path，统一走平台入口鉴权。
+     注意：捕获到的请求内容对平台内可见，请勿在测试请求中携带敏感凭据。
+
+  说明：
+  - 本包未做实机验证，功能以官方文档为准：
+    https://github.com/tarampampam/webhook-tester#readme
+  - 许可证 MIT，随包分发，见 /package-licenses/。
+  - 包内含 redis 服务仅用于请求暂存，数据不落盘（重启即清空）。
